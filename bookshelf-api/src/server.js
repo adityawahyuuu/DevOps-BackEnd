@@ -1,4 +1,6 @@
 const Hapi = require('@hapi/hapi');
+const Vision = require('@hapi/vision');
+const ejs = require('ejs');
 const routes = require('./routes');
 require('./db');
 
@@ -11,6 +13,12 @@ const init = async () => {
                 origin: ['*'],
             },
         },
+    });
+
+    await server.register(Vision);
+    server.views({
+        engines: {ejs: ejs},
+        relativeTo: 'D:/practice/DevOps-BackEnd/bookshelf-api'
     });
 
     server.route(routes);
