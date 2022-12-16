@@ -64,6 +64,8 @@ const addBookHandler = async (req, h) => {
                 return h.view('empty', {message: `Nama Buku tidak Boleh Hanya Whitespace`});
                 // const whiteSpaceBookName = handlerFunc(h, 'fail', 'Nama Buku tidak Boleh Hanya Whitespace', 400);
                 // return whiteSpaceBookName;
+            } else if(parseInt(readPage) > parseInt(pageCount)){
+                return h.view('empty', {message: `Read Page tidak Boleh Lebih dari Page Count`});
             }
             await book.save();
             return h.view('add-book', {data: `${name} berhasil ditambahkan`})
