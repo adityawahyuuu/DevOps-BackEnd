@@ -8,4 +8,4 @@ Teknologi yang dipakai yaitu hapi, mongodb, dan nodejs.
 3. Melihat Detai Buku
 4. Mengedit Buku
 5. Menghapus Buku
-6. Authentikasi dengan @hapi/jwt dan jsonwebtoken (Dalam Tahap Pengembangan)
+6. Authentikasi dengan @hapi/jwt dan jsonwebtoken (**Dalam Tahap Pengembangan**)
