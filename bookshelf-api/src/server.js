@@ -7,7 +7,7 @@ const secret = require('./config');
 require('./db');
 
 const plugin = [Vision, hapiJwtAuth];
-const validate = async (decoded, request, h) => {
+const validate = async (decoded, req, h) => {
     if (decoded.username == undefined) {
         return { isValid: false };
     }

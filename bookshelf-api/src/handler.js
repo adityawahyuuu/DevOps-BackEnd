@@ -71,9 +71,7 @@ const signInHandler = async (req, h) => {
             username: user[0].username,
             password: user[0].password
         }
-        // console.log(userAuth);
         const token = JWT.sign(userAuth, secret, {algorithm: 'HS256'});
-        // console.log(token);
         return h.view('form-token', {
             token: token
         });
@@ -88,36 +86,27 @@ const signInHandler = async (req, h) => {
 // -------------------------------------------------- //
 const getAllBooksHandler = async (req, h) => {
     try{
-        const header = req.auth;
-        const token = header.token;
-        // console.log(token);
         const bookArray = await findAllData(Book);
         return h.view('all-book', {
             bookArray,
-            token
+            token: req.auth.token,
         });
     } catch(e){
-        const header = req.auth;
-        const token = header.token;
         return h.view('empty', {
             message: `${e}`,
-            token
+            token: req.auth.token
         });
     }
 };
 
 const formAddBookHandler = (req, h) => {
     try {
-        const header = req.auth;
-        const token = header.token;
-        return h.view('form-book', {token});
+        return h.view('form-book', {token: req.auth.token});
 
     } catch(e){
-        const header = req.auth;
-        const token = header.token;
         return h.view('empty', {
             message: `${e}`,
-            token
+            token: req.auth.token
         });
     }
 };
@@ -142,53 +131,44 @@ const addBookHandler = async (req, h) => {
         };
         const id = await existingData(filterBook, Book);
         if(id === null){
-            const header = req.auth;
-            const token = header.token;
             if(onlySpaces(name)){
                 return h.view('empty', {
                     message: `Nama Buku tidak Boleh Hanya Whitespace`,
-                    token
+                    token: req.auth.token
                 });
             } else if(parseInt(readPage) > parseInt(pageCount)){
                 return h.view('empty', {
                     message: `Read Page tidak Boleh Lebih dari Page Count`,
-                    token
+                    token: req.auth.token
                 });
             }
             await book.save();
             return h.view('empty', {
                 message: `${name} berhasil ditambahkan`,
-                token
+                token: req.auth.token
             });
 
         } else{
-            const header = req.auth;
-            const token = header.token;
             return h.view('empty', {
                 message: `Buku ${name} sudah ada`,
-                token
+                token: req.auth.token
             });
         }
     } catch(e){
-        const header = req.auth;
-        const token = header.token;
         return h.view('empty', {
             message: `${e}`,
-            token
+            token: req.auth.token
         });
     }
 };
 
 const getBookByIdHandler = async (req, h) => {
     try{
-        const header = req.auth;
-        const token = header.token;
         const {id} = req.params;
         const bookArray = await findAllData(Book);
         const books = bookArray.filter(book => book._id == id);
         if(books.length > 0){
             return h.view('by-id-view', {
-                token,
                 id: books[0].id,
                 name: books[0].name,
                 year: books[0].year,
@@ -198,39 +178,34 @@ const getBookByIdHandler = async (req, h) => {
                 readPage: books[0].readPage,
                 finished: books[0].finished,
                 insertedAt: books[0].insertedAt,
-                updatedAt: books[0].updatedAt
+                updatedAt: books[0].updatedAt,
+                token: req.auth.token
             });
         }
         return h.view('empty', {
             message: `Buku tidak ditemukan`,
-            token
+            token: req.auth.token
         })
     } catch(e){
-        const header = req.auth;
-        const token = header.token;
         return h.view('empty', {
             message: `${e}`,
-            token
+            token: req.auth.token
         });
     }
 };
 
 const formEditBookHandler = async (req, h) => {
     try {
-        const header = req.auth;
-        const token = header.token;
         const id = req.params.id;
         return h.view('form-edit-book', {
             id,
-            token
+            token: req.auth.token
         });
 
     } catch(e){
-        const header = req.auth;
-        const token = header.token;
         return h.view('empty', {
             message: `${e}`,
-            token
+            token: req.auth.token
         });
     }
 }
@@ -245,8 +220,6 @@ const editBookByIdHandler = async (req, h) => {
         const bookArray = await findAllData(Book);
         const index = bookArray.findIndex(book => book._id == id);
         
-        const header = req.auth;
-        const token = header.token;
         if(index != -1){
             if(onlySpaces(name)){
                 return h.view('empty', {message: `Nama Buku tidak Boleh Hanya Whitespace`});
@@ -266,40 +239,34 @@ const editBookByIdHandler = async (req, h) => {
             bookArray[index].save();
             return h.view('empty', {
                 message: `Buku ${bookArray[index].name} Berhasil Diupdate`,
-                token
+                token: req.auth.token
             });
         } else{
             return h.view('empty', {
                 message: `Gagal memperbarui buku. Id tidak ditemukan`,
-                token
+                token: req.auth.token
             });
         }
         
     } catch(e){
-        const header = req.auth;
-        const token = header.token;
         return h.view('empty', {
             message: `${e}`,
-            token
+            token: req.auth.token
         });
     }
 };
 
 const deleteValidationHandler = async (req, h) => {
     try {
-        const header = req.auth;
-        const token = header.token;
         const id = req.params.id;
         return h.view('validation-delete-book', {
             id,
-            token
+            token: req.auth.token
         });
     } catch(e){
-        const header = req.auth;
-        const token = header.token;
         return h.view('empty', {
             message: `${e}`,
-            token
+            token: req.auth.token
         });
     }
 };
@@ -311,8 +278,6 @@ const deleteBookByIdHandler = async (req, h) => {
         const bookArray = await findAllData(Book);
         const index = bookArray.findIndex(book => (book._id == id) && (id == data.id));
 
-        const header = req.auth;
-        const token = header.token;
         if(index != -1){
             Book.deleteOne({_id: bookArray[index].id}, (err, doc) => {
                 if(err){
@@ -324,20 +289,18 @@ const deleteBookByIdHandler = async (req, h) => {
             bookArray[index].updatedAt = deletedAt
             return h.view('empty', {
                 message: `"${bookArray[index].name}" Berhasil dihapus ${deletedAt}`,
-                token
+                token: req.auth.token
             });
         } else{
             return h.view('empty', {
                 message: `Buku gagal dihapus. Id yang anda masukan tidak sesuai`,
-                token
+                token: req.auth.token
             });
         }
     } catch(e){
-        const header = req.auth;
-        const token = header.token;
         return h.view('empty', {
             message: `${e}`,
-            token
+            token: req.auth.token
         });
     }
 };
