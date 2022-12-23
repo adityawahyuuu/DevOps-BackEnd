@@ -1,45 +1,77 @@
-const {formAddBookHandler, addBookHandler, getAllBooksHandler, getBookByIdHandler, formEditBookHandler, editBookByIdHandler, deleteValidation, deleteBookByIdHandler} = require('./handler');
+const {signInHandler, formSignInHandler, mainPageHandler, signUpHandler, formSignUpHandler, formAddBookHandler, addBookHandler, getAllBooksHandler, getBookByIdHandler, formEditBookHandler, editBookByIdHandler, deleteValidationHandler, deleteBookByIdHandler} = require('./handler');
 
 const routes = [
     {
         method: 'GET',
         path: '/',
-        handler: getAllBooksHandler
+        config: { auth: false }, 
+        handler: mainPageHandler
+    },
+    {
+        method: 'GET',
+        path: '/signup',
+        config: { auth: false }, 
+        handler: formSignUpHandler
+    },
+    {
+        method: 'POST',
+        path: '/signup',
+        config: { auth: false }, 
+        handler: signUpHandler
+    },
+    {
+        method: 'GET',
+        path: '/signin',
+        config: { auth: false }, 
+        handler: formSignInHandler
+    },
+    {
+        method: 'POST',
+        path: '/signin',
+        config: { auth: false }, 
+        handler: signInHandler
+    },
+
+    // Routes dibawah harus menerapkan authentikasi
+    {
+        method: 'GET',
+        path: '/books',
+        handler: getAllBooksHandler,
     },
     {
         method: 'GET',
         path: '/book',
-        handler: formAddBookHandler
+        handler: formAddBookHandler,
     },
     {
         method: 'POST',
         path: '/book',
-        handler: addBookHandler
+        handler: addBookHandler,
     },
     {
         method: 'GET',
         path: '/book/{id}',
-        handler: getBookByIdHandler
+        handler: getBookByIdHandler,
     },
     {
         method: 'GET',
         path: '/book/{id}/edit',
-        handler: formEditBookHandler
+        handler: formEditBookHandler,
     },
     {
         method: 'POST',
         path: '/book/{id}/edit',
-        handler: editBookByIdHandler
+        handler: editBookByIdHandler,
     },
     {
         method: 'GET',
         path: '/book/{id}/delete',
-        handler: deleteValidation
+        handler: deleteValidationHandler,
     },
     {
         method: 'POST',
         path: '/book/{id}/delete',
-        handler: deleteBookByIdHandler
+        handler: deleteBookByIdHandler,
     }
 ];
 
