@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
+
 const bookSchema = new Schema({
     name: {
         type: String,
@@ -57,7 +57,10 @@ const userSchema = new Schema({
 });
 
 const Book = mongoose.model('Book', bookSchema);
-const authData = mongoose.model('User', userSchema);
+const createCollection = (collection, Schema) => {
+    return mongoose.model(collection, Schema);
+};
+
 const existingData = async (filter, data) => {
     try{
         const idObject = await data.exists(filter);
@@ -76,4 +79,4 @@ const findAllData = async (data) => {
     }
 }
 
-module.exports = {existingData, findAllData, Book, authData};
+module.exports = {createCollection, existingData, findAllData, Book, bookSchema, userSchema};

@@ -1,4 +1,4 @@
-const {signInHandler, formSignInHandler, mainPageHandler, signUpHandler, formSignUpHandler, formAddBookHandler, addBookHandler, getAllBooksHandler, getBookByIdHandler, formEditBookHandler, editBookByIdHandler, deleteValidationHandler, deleteBookByIdHandler} = require('./handler');
+const {logoutHandler, signInHandler, formSignInHandler, mainPageHandler, signUpHandler, formSignUpHandler, formAddBookHandler, addBookHandler, getAllBooksHandler, getBookByIdHandler, formEditBookHandler, editBookByIdHandler, deleteValidationHandler, deleteBookByIdHandler} = require('./handler');
 
 const routes = [
     {
@@ -72,6 +72,11 @@ const routes = [
         method: 'POST',
         path: '/book/{id}/delete',
         handler: deleteBookByIdHandler,
+    },
+    {
+        method: 'GET',
+        path: '/logout',
+        handler: logoutHandler
     }
 ];
 
