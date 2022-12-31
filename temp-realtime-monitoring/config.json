@@ -1,0 +1,16 @@
+{
+    "application": {
+      "host": "localhost",
+      "port": 8000,
+      "logLevel": "debug",
+      "dataStore": "redis"
+    },
+    "dataStores": {
+      "redis": {
+        "host": "localhost",
+        "port": 6379,
+        "password": null,
+        "keyPrefix": "IoT"
+      }
+    }
+  }
