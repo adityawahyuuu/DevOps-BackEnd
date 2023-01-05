@@ -2,6 +2,9 @@ const redis = require('redis');
 const bluebird = require('bluebird');
 const config = require('better-config');
 
+redis.addCommand('ts.add');
+redis.addCommand('ts.range');
+
 bluebird.promisifyAll(redis);
 
 const redisClientConfig = {
