@@ -9,9 +9,14 @@ router.post(
         body('*.id').isInt(),
         body('*.dateTime').isInt({ min: 0 }),
         body('*.humidity').isFloat({max: 100}),
-        body('*.tempC').isFloat(),
+        body('*.temperature').isFloat(),
     ],
     controller.adUnitasTS
 );
+
+router.get(
+    '/realtime',
+    controller.getTSKey
+)
 
 module.exports = router;

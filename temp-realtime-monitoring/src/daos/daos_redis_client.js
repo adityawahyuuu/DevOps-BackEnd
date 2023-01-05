@@ -4,6 +4,7 @@ const config = require('better-config');
 
 redis.addCommand('ts.add');
 redis.addCommand('ts.range');
+redis.addCommand('ts.get');
 
 bluebird.promisifyAll(redis);
 

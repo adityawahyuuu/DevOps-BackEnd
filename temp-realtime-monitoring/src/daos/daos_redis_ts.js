@@ -30,8 +30,8 @@ const insertUnit = async (id, unitValue, unitName, timestamp) => {
 const insert = async (unitReading) => {
     for (const unit of unitReading){
         await Promise.all([
-            insertUnit(unit.id, unit.tempC, "temperature", unit.dateTime),
             insertUnit(unit.id, unit.humidity, "humidity", unit.dateTime),
+            insertUnit(unit.id, unit.temperature, "temperature", unit.dateTime),
         ]);
     }
 };
@@ -42,7 +42,17 @@ const insert = async (unitReading) => {
  * dalam redis
  *
  */
+const getTsData = async (key, limit) => {
+    const client = redis.getClient();
+    // Tentukan limitnya
+    const latestData = await client.ts_getAsync(key);
+    const toMillis = latestData[0];
+    const fromMillis = toMillis - (limit * 60) * 1000;
+    const data = await client.ts_rangeAsync(key, fromMillis, toMillis);
+    return data;
+}
 
 module.exports = {
-    insert
+    insert,
+    getTsData
 };
