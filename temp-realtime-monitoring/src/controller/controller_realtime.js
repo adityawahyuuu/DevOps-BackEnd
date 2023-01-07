@@ -26,7 +26,7 @@ const adUnitasTS = async (req, res) => {
 
 const getTSKey = async (req, res) => {
     try{
-        const collection = [];
+        const collections = [];
         const tempCollection = [];
         const humidityCollection = [];
         const client = redis.getClient();
@@ -36,15 +36,24 @@ const getTSKey = async (req, res) => {
                     if (key === recentKey) {
                         await tsRedisDaos.getTsData(key);
                         const data = await tsRedisDaos.getTsData(key);
-                        collection.push(data);
+                        collections.push(data);
 
-                        if (key === "IoT:ts:3:temperature") tempCollection.push(collection[0]);
-                        else if (key === "IoT:ts:3:humidity") humidityCollection.push(collection[1]);
+                        if (recentKey === "IoT:ts:3:temperature") {
+                            collections.forEach(collection => {
+                                collection.forEach(element => {
+                                    if (element[1] >= 50 && element[1] <= 100){
+                                        humidityCollection.push(element);
+                                    } else if (element[1] >= 0 && element[1] <= 50){
+                                        tempCollection.push(element);
+                                    }
+                                });
+                            });
+                        };
                     };
                 };
             };
-            const tempObj = helper.arrayToObject(tempCollection, "temperature");
-            const humidityObj = helper.arrayToObject(humidityCollection, "humidity");
+            const tempObj = helper.flatArray(tempCollection, "temperature");
+            const humidityObj = helper.flatArray(humidityCollection, "humidity");
             res.render('../views/graph', {tempObj, humidityObj});
         });
     } catch(e){

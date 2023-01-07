@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html>
+    <meta http-equiv="refresh" content="60">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <body>
-        <div id="myChart" style="width:100%; max-width:600px; height:500px;"></div>
+        <div id="myChart" style="width:100%; max-width:1800px; height:500px;"></div>
         <% if ((tempObj.length >= 30) && (humidityObj.length >= 30)) { %>
             <script>
                 google.charts.load('current',{packages:['corechart']});
                 google.charts.setOnLoadCallback(drawChart);
                 var dataTemp = `<%= tempObj %>`;
-                // console.log(typeof(dataTemp));
-                // console.log(dataTemp);
                 var newTempData = dataTemp.split(',');
-                // console.log(newTempData);
                 var tempData = []
                 var i = 0;
                 for (i=0; i<=59; i++){
@@ -21,7 +19,6 @@
                     tempArray.push(parseInt(newTempData[i]));
                     tempData.push(tempArray);
                 }
-                // console.log(tempData);
 
                 function drawChart() {
                     // Set Data
