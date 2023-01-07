@@ -1,7 +1,8 @@
 const {validationResult} = require('express-validator');
-const tsRedisDaos = require('../daos/daos_redis_ts');
-const redis = require('../daos/daos_redis_client');
-const keyGenerator = require('../daos/daos_redis_key_generator');
+const tsRedisDaos = require('../daos/daos_redis_ts.js');
+const redis = require('../daos/daos_redis_client.js');
+const keyGenerator = require('../daos/daos_redis_key_generator.js');
+const helper = require('../helpers/arrayToObject');
 
 const recentKeys = [];
 const adUnitasTS = async (req, res) => {
@@ -22,28 +23,40 @@ const adUnitasTS = async (req, res) => {
     }
 };
 
+
 const getTSKey = async (req, res) => {
     try{
         const collection = [];
+        const tempCollection = [];
+        const humidityCollection = [];
         const client = redis.getClient();
         client.keys('*', async (err, keys) => {
             for (const key of keys){
                 for (const recentKey of recentKeys){
                     if (key === recentKey) {
-                        // Limit Max 60
-                        const data = await tsRedisDaos.getTsData(key, 60);
+                        await tsRedisDaos.getTsData(key);
+                        const data = await tsRedisDaos.getTsData(key);
                         collection.push(data);
+
+                        if (key === "IoT:ts:3:temperature") tempCollection.push(collection[0]);
+                        else if (key === "IoT:ts:3:humidity") humidityCollection.push(collection[1]);
                     };
                 };
             };
-            res.send(collection);
+            const tempObj = helper.arrayToObject(tempCollection, "temperature");
+            const humidityObj = helper.arrayToObject(humidityCollection, "humidity");
+            // console.log(tempObj);
+            // console.log(humidityObj);
+            // console.log(collection[0].length);
+            res.render('../views/graph', {tempObj, humidityObj});
         });
     } catch(e){
-        res.send(e);
+        console.log(e);
     }
-}
+};
+
 
 module.exports = {
     adUnitasTS,
-    getTSKey
+    getTSKey,
 }

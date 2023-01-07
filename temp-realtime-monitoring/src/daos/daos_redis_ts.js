@@ -1,5 +1,5 @@
-const redis = require('./daos_redis_client');
-const keyGenerator = require('./daos_redis_key_generator');
+const redis = require('./daos_redis_client.js');
+const keyGenerator = require('./daos_redis_key_generator.js');
 
 const maxUnitRetentionDays = 30;
 const daySeconds = 24 * 60 * 60;
@@ -43,12 +43,25 @@ const insert = async (unitReading) => {
  *
  */
 const getTsData = async (key, limit) => {
+    // const value = [];
     const client = redis.getClient();
     // Tentukan limitnya
     const latestData = await client.ts_getAsync(key);
     const toMillis = latestData[0];
-    const fromMillis = toMillis - (limit * 60) * 1000;
-    const data = await client.ts_rangeAsync(key, fromMillis, toMillis);
+    const fromMillis = toMillis - 2310000;
+    let data = await client.ts_rangeAsync(key, fromMillis, toMillis);
+    // for (let i=0; i<=data.length; i++){
+    //     if (data[i] != undefined){
+    //         for (let j=0; j<=data[i].length; j++){
+    //             value.push(parseInt(data[i][1]));
+    //         }
+    //     }
+    // }
+    // console.log(data.length);
+    // console.log(value.length);
+    // const removedValue = value.splice(data.length, value.length-(data.length*2));
+    // console.log(removedValue.length);
+    // return removedValue;
     return data;
 }
 

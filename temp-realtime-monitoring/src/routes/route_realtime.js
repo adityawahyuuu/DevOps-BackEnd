@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {body} = require('express-validator');
-const controller = require('../controller/controller_realtime');
+const controller = require('../controller/controller_realtime.js');
 
 router.post(
     '/realtime',
@@ -17,6 +17,6 @@ router.post(
 router.get(
     '/realtime',
     controller.getTSKey
-)
+);
 
 module.exports = router;

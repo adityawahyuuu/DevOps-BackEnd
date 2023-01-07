@@ -4,10 +4,10 @@ const config = require('better-config');
 const bodyParser = require('body-parser');
 const router = require('./routes');
 
-
 config.set('../config.json');
 const app = express();
 
+app.set('view engine', 'ejs');
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/', router);
