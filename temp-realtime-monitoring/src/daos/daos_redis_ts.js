@@ -43,25 +43,12 @@ const insert = async (unitReading) => {
  *
  */
 const getTsData = async (key, limit) => {
-    // const value = [];
     const client = redis.getClient();
     // Tentukan limitnya
     const latestData = await client.ts_getAsync(key);
     const toMillis = latestData[0];
     const fromMillis = toMillis - 2310000;
     let data = await client.ts_rangeAsync(key, fromMillis, toMillis);
-    // for (let i=0; i<=data.length; i++){
-    //     if (data[i] != undefined){
-    //         for (let j=0; j<=data[i].length; j++){
-    //             value.push(parseInt(data[i][1]));
-    //         }
-    //     }
-    // }
-    // console.log(data.length);
-    // console.log(value.length);
-    // const removedValue = value.splice(data.length, value.length-(data.length*2));
-    // console.log(removedValue.length);
-    // return removedValue;
     return data;
 }
 
