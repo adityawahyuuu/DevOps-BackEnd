@@ -4,7 +4,7 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <body>
         <div id="myChart" style="width:100%; max-width:1800px; height:500px;"></div>
-        <% if ((tempObj.length >= 30) && (humidityObj.length >= 30)) { %>
+        <% if ((tempObj.length >= 1) && (humidityObj.length >= 1)) { %>
             <script>
                 google.charts.load('current',{packages:['corechart']});
                 google.charts.setOnLoadCallback(drawChart);
