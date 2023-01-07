@@ -45,9 +45,6 @@ const getTSKey = async (req, res) => {
             };
             const tempObj = helper.arrayToObject(tempCollection, "temperature");
             const humidityObj = helper.arrayToObject(humidityCollection, "humidity");
-            // console.log(tempObj);
-            // console.log(humidityObj);
-            // console.log(collection[0].length);
             res.render('../views/graph', {tempObj, humidityObj});
         });
     } catch(e){
