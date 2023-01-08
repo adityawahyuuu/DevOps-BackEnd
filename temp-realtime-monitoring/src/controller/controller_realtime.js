@@ -9,8 +9,10 @@ const adUnitasTS = async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(400).json({ errors: errors.array() });
+            res.status(404).json({errors: errors.array()});
         };
+        console.log(errors.array());
+
         recentKeys.splice(deleteCount=0);
         for (const body of req.body){
             recentKeys.push(keyGenerator.getTSKey(body.id, Object.keys(body)[2]));
@@ -57,7 +59,7 @@ const getTSKey = async (req, res) => {
             res.render('../views/graph', {tempObj, humidityObj});
         });
     } catch(e){
-        console.log(e);
+        res.json(e);
     }
 };
 
